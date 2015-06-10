@@ -26,7 +26,7 @@ public class FindBandwidthThread implements Runnable {
 		int minBandwidthForSet = Integer.MAX_VALUE;
 
 		try {
-			out = new BufferedWriter(new FileWriter(new File("data[" + this.n + "," + this.s + "," + this.w + "].txt")));
+			out = new BufferedWriter(new FileWriter(new File("data" + File.separator + "data[" + this.n + "," + this.s + "," + this.w + "].txt")));
 
 			Integer[] userSet = new Integer[this.n];
 			for (int i = 0; i < this.n; i++) {

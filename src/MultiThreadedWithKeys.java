@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -12,8 +13,11 @@ public class MultiThreadedWithKeys {
 	public static void main(String[] args) {
 		ExecutorService ex;
 		BufferedWriter out;
+		
+		
+		
 		try {
-			out = new BufferedWriter(new FileWriter(new File("summary.txt")));
+			out = new BufferedWriter(new FileWriter(new File("data" + File.separator + "summary.txt")));
 			ex = Executors.newFixedThreadPool(THREADS);
 
 			for (int n = 3; n < 8; n++) {
