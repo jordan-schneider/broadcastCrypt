@@ -2,39 +2,39 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class MultiThreadedWithKeys {
-	private static final int	THREADS	= 2;
+	private static final int	THREADS	= 4;
 
 	public static void main(String[] args) {
 		ExecutorService ex;
-		BufferedWriter out;
-		
-		
-		
+		BufferedWriter summaryOut;
+
 		try {
-			out = new BufferedWriter(new FileWriter(new File("data" + File.separator + "summary.txt")));
+			summaryOut = new BufferedWriter(new FileWriter("data" + File.separator + "summary.txt", true));
 			ex = Executors.newFixedThreadPool(THREADS);
 
 			for (int n = 3; n < 8; n++) {
 				for (int s = n - 1; s <= Math.round(Math.pow(2, n - 1)); s++) {
-					for (int w = s+n-1; w <= Math.round(Math.pow(2, n)) - n - 1; w++) {
-						ex.execute(new FindBandwidthThread(n, s, w, out));
+					for (int w = choose(n,2) + (s-(n-1)); w <= Math.round(Math.pow(2, n)) - n - 1; w++) {
+						File f = new File("data" + File.separator + "data[" + n + "," + s + "," + w + "].txt");
+						if(!f.exists()){
+							ex.execute(new FindBandwidthThread(n, s, w, summaryOut, f));
+						}
 					}
 				}
 			}
 
 			try {
-				ex.awaitTermination(1, TimeUnit.DAYS);
+				ex.awaitTermination(10, TimeUnit.MINUTES);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-			out.close();
+			summaryOut.close();
 		} catch (IOException e) {
 
 		}
