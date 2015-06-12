@@ -10,23 +10,33 @@ import org.paukov.combinatorics.ICombinatoricsVector;
 
 public class FindBandwidthThread implements Runnable {
 	int				n, s, w, b;
-	BufferedWriter	summaryOut;
+	BufferedWriter	summaryOut, dataOut;
+	File dataFile;
 
-	public FindBandwidthThread(int n, int s, int w, BufferedWriter out) {
+	public FindBandwidthThread(int n, int s, int w, BufferedWriter out, File f) {
 		this.n = n;
 		this.s = s;
 		this.w = w;
 		this.summaryOut = out;
+		dataFile = f;
+		dataOut = null;
 	}
 
 	@Override
 	public void run() {
-		BufferedWriter out;
+		System.out.println("Working on (n,s,w)=(" + n + "," + s + "," + w+")");
+		
+		try {
+			dataOut = new BufferedWriter(new FileWriter(dataFile));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		int minBandwidthForSet = Integer.MAX_VALUE;
 
 		try {
-			out = new BufferedWriter(new FileWriter(new File("data" + File.separator + "data[" + this.n + "," + this.s + "," + this.w + "].txt")));
+			dataOut = new BufferedWriter(new FileWriter(new File("data" + File.separator + "data[" + this.n + "," + this.s + "," + this.w + "].txt")));
 
 			Integer[] userSet = new Integer[this.n];
 			for (int i = 0; i < this.n; i++) {
@@ -86,7 +96,7 @@ public class FindBandwidthThread implements Runnable {
 						}
 					}
 					if (assignmentWorks) {
-						out.write(print(assignment) + ", " + maxBandwidth + "\n");
+						dataOut.write(print(assignment) + ", " + maxBandwidth + "\n");
 						if (maxBandwidth < minBandwidthForSet) {
 							minBandwidthForSet = maxBandwidth;
 						}
@@ -96,15 +106,15 @@ public class FindBandwidthThread implements Runnable {
 						break top;
 					}
 				}
-			out.flush();
-			out.close();
+			dataOut.flush();
+			dataOut.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		this.b = minBandwidthForSet;
 		try {
-			this.summaryOut.write("n=" + this.n + " s=" + this.s + " w=" + this.w + " b=" + this.b + "\n");
-			System.out.println("n=" + this.n + " s=" + this.s + " w=" + this.w + " b=" + this.b);
+			this.summaryOut.write("(n,s,w,b)=(" + this.n + "," + this.s + "," + this.w + "," + this.b+")" + "\n");
+			System.out.println("(n,s,w,b)=(" + this.n + "," + this.s + "," + this.w + "," + this.b+")");
 			this.summaryOut.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

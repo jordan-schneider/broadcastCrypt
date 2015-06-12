@@ -16,7 +16,6 @@ public class SingleThreadWithKeys {
 		try {
 			out = new BufferedWriter(new FileWriter(new File("summary.txt")));
 			
-			/*
 			for (int n = 2; n < 8; n++) {
 				for (int s = n - 1; s <= Math.round(Math.pow(2, n - 1)); s++) {
 					for (int w = (s + n) - 1; w <= (Math.round(Math.pow(2, n)) - n - 1); w++) {
@@ -24,7 +23,7 @@ public class SingleThreadWithKeys {
 					}
 				}
 			}
-			*/
+			
 			
 			System.out.println(findBandwidth(2, 1, 1));
 			
